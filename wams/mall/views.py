@@ -5,9 +5,9 @@ import os
 
 import requests
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 
-from mall.models import Config, User
+from mall.models import Config, User, Banner
 from wams import config
 
 
@@ -15,10 +15,10 @@ def generate_token():
     return os.urandom(32).encode('hex')
 
 
-def ok(**kwargs):
+def ok(data=None, **kwargs):
     data = {
         'code': 0,
-        'data': kwargs,
+        'data': data or kwargs,
     }
     return JsonResponse(data)
 
@@ -58,3 +58,12 @@ def check_token(request):
     key = request.GET.get('token')
     user = get_object_or_404(User, token=token)
     return ok()
+
+
+def banners(request):
+    banners = get_list_or_404(Banner)
+    banners = [
+        {'businessId': banner.goods_id, 'picUrl': banner.pic_url}
+        for banner in banners
+    ]
+    return ok(banners)

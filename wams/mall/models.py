@@ -13,3 +13,8 @@ class User(models.Model):
     openid = models.CharField(max_length=200, db_index=True)
     session_key = models.CharField(max_length=200)
     token = models.CharField(max_length=200, db_index=True)
+
+
+class Banner(models.Model):
+    goods_id = models.IntegerField(db_index=True)
+    pic_url = models.CharField(max_length=200)
